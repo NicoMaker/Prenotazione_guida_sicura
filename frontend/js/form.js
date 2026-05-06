@@ -95,13 +95,9 @@ function resetForm() {
   AppState.formData = {};
 
   document
-    .querySelectorAll(".time-slot")
-    .forEach((s) => s.classList.remove("selected"));
-  document
     .querySelectorAll(".date-slot")
     .forEach((s) => s.classList.remove("selected"));
   document.querySelectorAll(".error").forEach((el) => (el.textContent = ""));
-  document.getElementById("timeSlotsContainer").innerHTML = "";
 
   const settings = AppState.companyInfo?.testRideSettings;
   if (settings?.daysAvailable) {
@@ -109,7 +105,7 @@ function resetForm() {
     document.getElementById("date").innerHTML =
       '<option value="">Seleziona data...</option>';
     AppState.dateSlotsMap = {};
-    loadDates(settings.daysAvailable, settings.defaultTimeSlots);
+    loadDates(settings.daysAvailable);
   }
 
   updateFormView();

@@ -8,7 +8,7 @@ function getAutoSelectDate(availableDates) {
   return availableDates[availableDates.length - 1];
 }
 
-function loadDates(daysAvailable, defaultTimeSlots) {
+function loadDates(daysAvailable) {
   const dateSelect = document.getElementById("date");
   const container = document.getElementById("dateSlotsContainer");
   AppState.dateSlotsMap = {};
@@ -20,11 +20,8 @@ function loadDates(daysAvailable, defaultTimeSlots) {
     const d = padTwo(day.day);
     const value = `${day.year}-${month}-${d}`;
     const label = formatDateLabel(day.day, day.month, day.year);
-    const slots =
-      day.timeSlots && day.timeSlots.length
-        ? day.timeSlots
-        : defaultTimeSlots || [];
-    AppState.dateSlotsMap[value] = slots;
+    // For session-based system, we don't need time slots
+    AppState.dateSlotsMap[value] = [];
     availableDateValues.push(value);
 
     const option = document.createElement("option");
@@ -141,29 +138,7 @@ function loadTimeSlotsForDate(dateVal) {
 }
 
 function refreshTimeSlotsUI() {
-  const dateVal = document.getElementById("date").value;
-  if (!dateVal) return;
-
-  const key = dateVal; // Simple key for date-based bookings
-  const booked = key ? AppState.bookedSlots[key] || [] : [];
-
-  const btns = document.querySelectorAll("#timeSlotsContainer .time-slot");
-  if (btns.length === 0 && dateVal) {
-    loadTimeSlotsForDate(dateVal);
-    return;
-  }
-
-  btns.forEach((btn) => {
-    const slot = btn.dataset.slot;
-    if (!slot) return;
-    const wasSelected = btn.classList.contains("selected");
-    const isBooked = booked.includes(slot);
-    btn.classList.toggle("booked", isBooked);
-
-    if (isBooked && wasSelected) {
-      btn.classList.remove("selected");
-      document.getElementById("time").value = "";
-      AppState.formData.selectedTime = "";
-    }
-  });
+  // This function is no longer needed for session-based system
+  // Session availability is handled by updateSessionAvailability()
+  updateSessionAvailability();
 }

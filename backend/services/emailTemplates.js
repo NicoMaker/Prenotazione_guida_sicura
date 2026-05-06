@@ -70,12 +70,9 @@ export function buildClienteEmail(booking, companyInfoData) {
   const c = companyInfoData.company || companyInfoData;
   const companyName = c.name || "Palmino Motors";
   const fullAddress = `${c.address}, ${c.city}${c.cap ? " " + c.cap : ""}`;
-  const mapsUrl =
-    c.mapsUrl ||
-    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
-  const pivaLine = c.piva ? `&nbsp;·&nbsp;P. IVA ${c.piva}` : "";
   const dateShort = formatDateIT(booking.date);
   const dateLong = formatDateLong(booking.date);
+  const sessionText = booking.session === 'morning' ? 'Mattina' : 'Pomeriggio';
 
   const badge = `<span style="display:inline-block;background:#e63312;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:3px;">Guida Sicura</span>`;
 
@@ -84,7 +81,7 @@ export function buildClienteEmail(booking, companyInfoData) {
     <td style="background:#e63312;padding:22px 36px;text-align:center;">
       <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:19px;font-weight:900;color:#ffffff;letter-spacing:1px;text-transform:uppercase;">&#10003; Prenotazione Confermata!</p>
       <p style="margin:6px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:rgba(255,255,255,0.85);letter-spacing:.5px;">
-        ${dateLong} &nbsp;·&nbsp; ore ${booking.time}
+        ${dateLong} &nbsp;·&nbsp; ${sessionText}
       </p>
     </td>
   </tr>`;
@@ -107,8 +104,8 @@ export function buildClienteEmail(booking, companyInfoData) {
           <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;font-weight:700;border-bottom:1px solid #e8e8e8;">${dateLong}</td>
         </tr>
         <tr>
-          <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;border-bottom:1px solid #e8e8e8;">Orario</td>
-          <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#e63312;font-weight:900;letter-spacing:.5px;border-bottom:1px solid #e8e8e8;">${booking.time}</td>
+          <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;border-bottom:1px solid #e8e8e8;">Sessione</td>
+          <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#e63312;font-weight:900;letter-spacing:.5px;border-bottom:1px solid #e8e8e8;">${sessionText}</td>
         </tr>
         <tr>
           <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;border-bottom:1px solid #e8e8e8;">Servizio</td>
@@ -161,17 +158,17 @@ export function buildClienteEmail(booking, companyInfoData) {
   return buildWrapper(
     buildHeader(companyName, badge) + hero,
     body,
-    buildFooter(companyName, pivaLine),
+    buildFooter(companyName),
   );
 }
 
 export function buildManagerEmail(booking, companyInfoData) {
   const c = companyInfoData.company || companyInfoData;
   const companyName = c.name || "Palmino Motors";
-  const pivaLine = c.piva ? `&nbsp;&middot;&nbsp;P. IVA ${c.piva}` : "";
   const dateShort = formatDateIT(booking.date);
   const dateLong = formatDateLong(booking.date);
   const phone = (booking.telefono || "").replace(/\s/g, "");
+  const sessionText = booking.session === 'morning' ? 'Mattina' : 'Pomeriggio';
 
   
   const adminHeader = `
@@ -196,7 +193,7 @@ export function buildManagerEmail(booking, companyInfoData) {
         &#128205; Nuova prenotazione Guida Sicura ricevuta
       </p>
       <p style="margin:4px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#aaaaaa;">
-        ${dateLong} &nbsp;&middot;&nbsp; ore <strong style="color:#e63312;">${booking.time}</strong>
+        ${dateLong} &nbsp;&middot;&nbsp; <strong style="color:#e63312;">${sessionText}</strong>
       </p>
     </td>
   </tr>`;
@@ -212,8 +209,8 @@ export function buildManagerEmail(booking, companyInfoData) {
           <td style="padding:10px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;font-weight:700;border-bottom:1px solid #e8e8e8;">${dateLong} (${dateShort})</td>
         </tr>
         <tr>
-          <td style="padding:10px 16px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;">Orario</td>
-          <td style="padding:10px 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#e63312;font-weight:900;letter-spacing:1px;">${booking.time}</td>
+          <td style="padding:10px 16px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;">Sessione</td>
+          <td style="padding:10px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#e63312;font-weight:900;letter-spacing:1px;">${sessionText}</td>
         </tr>
       </table>
 

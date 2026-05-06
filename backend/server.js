@@ -64,6 +64,10 @@ app.use((err, _req, res, _next) => {
 httpServer.listen(PORT, "0.0.0.0", async () => {
   const localIP = getLocalIP();
   const publicIP = await getPublicIP();
+  
+  // Initialize email service
+  initEmailTransporter();
+  
   console.log("✅  Server avviato con Socket.io");
   console.log(`📍  Localhost:    http://localhost:${PORT}`);
   console.log(`🏠  Rete locale:  http://${localIP}:${PORT}`);
