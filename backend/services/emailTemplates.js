@@ -51,11 +51,7 @@ function buildHeader(companyName, badge = "") {
   </tr>`;
 }
 
-function buildFooter(
-  companyName,
-  pivaLine,
-  note = "Tutti i diritti riservati",
-) {
+function buildFooter(companyName, pivaLine = "", note = "Tutti i diritti riservati") {
   return `
   <tr>
     <td style="background:#111111;padding:18px 36px;text-align:center;">
@@ -72,7 +68,13 @@ export function buildClienteEmail(booking, companyInfoData) {
   const fullAddress = `${c.address}, ${c.city}${c.cap ? " " + c.cap : ""}`;
   const dateShort = formatDateIT(booking.date);
   const dateLong = formatDateLong(booking.date);
-  const sessionText = booking.session === 'morning' ? 'Mattina' : 'Pomeriggio';
+  const sessionText = booking.session === "morning" ? "Mattina" : "Pomeriggio";
+
+  // ── FIX: mapsUrl ora presa da c.mapsUrl con fallback a Google Maps ──
+  const mapsUrl = c.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+
+  // ── FIX: pivaLine calcolata correttamente ──
+  const pivaLine = c.piva ? ` · P. IVA ${c.piva}` : "";
 
   const badge = `<span style="display:inline-block;background:#e63312;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:3px;">Guida Sicura</span>`;
 
@@ -158,7 +160,7 @@ export function buildClienteEmail(booking, companyInfoData) {
   return buildWrapper(
     buildHeader(companyName, badge) + hero,
     body,
-    buildFooter(companyName),
+    buildFooter(companyName, pivaLine),
   );
 }
 
@@ -168,9 +170,11 @@ export function buildManagerEmail(booking, companyInfoData) {
   const dateShort = formatDateIT(booking.date);
   const dateLong = formatDateLong(booking.date);
   const phone = (booking.telefono || "").replace(/\s/g, "");
-  const sessionText = booking.session === 'morning' ? 'Mattina' : 'Pomeriggio';
+  const sessionText = booking.session === "morning" ? "Mattina" : "Pomeriggio";
 
-  
+  // ── FIX: pivaLine calcolata correttamente ──
+  const pivaLine = c.piva ? ` · P. IVA ${c.piva}` : "";
+
   const adminHeader = `
   <tr>
     <td style="background:#111111;padding:0;">
