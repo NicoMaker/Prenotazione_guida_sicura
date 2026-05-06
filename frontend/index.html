@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Test Ride – Palmino Motors</title>
+    <meta
+      name="description"
+      content="Prenota il tuo test ride gratuito da Palmino Motors. Prova le migliori moto del mercato il 9 e 10 Maggio 2026."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/Logo.png" />
+  </head>
+
+  <body>
+    <div class="app-container">
+      <!-- ==================== NAVBAR ==================== -->
+      <nav class="navbar">
+        <div class="logo-section">
+          <img
+            src="img/Logo.png"
+            alt="Logo Palmino Motors"
+            class="logo-img"
+            onerror="this.style.display = 'none'"
+          />
+          <div class="brand-info">
+            <h1>Palmino Motors</h1>
+            <p>Concessionaria Ufficiale</p>
+          </div>
+        </div>
+        <div class="navbar-right">
+          <div
+            id="socketStatus"
+            class="socket-status socket-connecting"
+            title="Stato connessione real-time"
+          >
+            <span class="socket-dot"></span>
+            <span class="socket-label">Connessione…</span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- ==================== HERO ==================== -->
+      <section class="hero">
+        <div class="hero-content">
+          <h2>Guida Sicura 10 Maggio 2026</h2>
+          <p>Solo Domenica 10 Maggio - Mattina e Pomeriggio (30 posti per sessione)</p>
+        </div>
+      </section>
+
+      <!-- ==================== MAIN ==================== -->
+      <main class="main-content">
+        <section class="booking-section">
+          <div class="container">
+            <!-- ===== FORM CARD ===== -->
+            <div class="form-wrapper">
+              <div class="form-header">
+                <h2>Prenota la Tua Guida Sicura</h2>
+                <p>Compila il modulo per prenotare la tua guida sicura gratuita</p>
+              </div>
+
+              <form id="testRideForm" novalidate>
+                <!-- STEP 1: Dati Personali -->
+                <div class="form-step active" id="step1">
+                  <h3><span class="step-number">1</span> Dati Personali</h3>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="nome"
+                        >Nome <span class="required">*</span></label
+                      >
+                      <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input
+                          type="text"
+                          id="nome"
+                          name="nome"
+                          required
+                          placeholder="Es. Marco"
+                        />
+                      </div>
+                      <span class="error" id="nomeError"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="cognome"
+                        >Cognome <span class="required">*</span></label
+                      >
+                      <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input
+                          type="text"
+                          id="cognome"
+                          name="cognome"
+                          required
+                          placeholder="Es. Rossi"
+                        />
+                      </div>
+                      <span class="error" id="cognomeError"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="email"
+                        >Email <span class="required">*</span></label
+                      >
+                      <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          required
+                          placeholder="Es. marco@email.it"
+                        />
+                      </div>
+                      <span class="error" id="emailError"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="telefono"
+                        >Telefono <span class="required">*</span></label
+                      >
+                      <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <input
+                          type="tel"
+                          id="telefono"
+                          name="telefono"
+                          required
+                          placeholder="Es. +39 333 1234567"
+                        />
+                      </div>
+                      <span class="error" id="telefonoError"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-navigation">
+                    <button type="button" class="btn-next" id="nextStep1Btn">
+                      Avanti <i class="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /step1 -->
+
+                
+                <!-- STEP 2: Data e Orario -->
+                <div class="form-step" id="step2">
+                  <h3><span class="step-number">2</span> Data e Orario</h3>
+
+                  <select id="date" name="date" required style="display: none">
+                    <option value="">Seleziona data...</option>
+                  </select>
+                  <select id="time" name="time" required style="display: none">
+                    <option value="">Seleziona orario...</option>
+                  </select>
+
+                  <div class="form-group">
+                    <p class="time-slots-label">Giorno disponibile:</p>
+                    <div id="dateSlotsContainer" class="date-slots-grid"></div>
+                    <span class="error" id="dateError"></span>
+                  </div>
+
+                  <div class="form-group" style="margin-top: 1.5rem">
+                    <p class="time-slots-label">Scegli la sessione:</p>
+                    <div class="session-selection">
+                      <div class="session-option" data-session="morning">
+                        <div class="session-radio">
+                          <input type="radio" id="morningSession" name="session" value="morning" required>
+                          <label for="morningSession">
+                            <i class="fas fa-sun"></i>
+                            <span class="session-title">Mattina</span>
+                            <span class="session-time">09:00 - 12:30</span>
+                            <span class="session-info"><span class="availability-counter">30</span> posti disponibili</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="session-option" data-session="afternoon">
+                        <div class="session-radio">
+                          <input type="radio" id="afternoonSession" name="session" value="afternoon" required>
+                          <label for="afternoonSession">
+                            <i class="fas fa-cloud-sun"></i>
+                            <span class="session-title">Pomeriggio</span>
+                            <span class="session-time">14:00 - 17:30</span>
+                            <span class="session-info"><span class="availability-counter">30</span> posti disponibili</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="error" id="sessionError"></span>
+                  </div>
+
+                  
+                  <div class="form-navigation">
+                    <button type="button" class="btn-prev" id="prevStep2Btn">
+                      <i class="fas fa-arrow-left"></i> Indietro
+                    </button>
+                    <button type="button" class="btn-next" id="nextStep2Btn">
+                      Avanti <i class="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /step2 -->
+
+                <!-- STEP 3: Conferma -->
+                <div class="form-step" id="step3">
+                  <h3>
+                    <span class="step-number">3</span> Conferma Prenotazione
+                  </h3>
+
+                  <div class="confirmation-summary">
+                    <div class="summary-section">
+                      <h4>Dati Personali</h4>
+                      <div class="summary-item">
+                        <span class="label">Nome</span
+                          ><span class="value" id="summaryNome">—</span>
+                      </div>
+                      <div class="summary-item">
+                        <span class="label">Cognome</span
+                          ><span class="value" id="summaryCognome">—</span>
+                      </div>
+                      <div class="summary-item">
+                        <span class="label">Email</span
+                          ><span class="value" id="summaryEmail">—</span>
+                      </div>
+                      <div class="summary-item">
+                        <span class="label">Telefono</span
+                          ><span class="value" id="summaryTelefono">—</span>
+                      </div>
+                    </div>
+                    <div class="summary-section">
+                      <h4>Dettagli Prenotazione</h4>
+                      <div class="summary-item">
+                        <span class="label">Servizio</span
+                          ><span class="value">Guida Sicura</span>
+                      </div>
+                      </div>
+                    <div class="summary-section">
+                      <h4>Prenotazione</h4>
+                      <div class="summary-item">
+                        <span class="label">Data</span
+                        ><span class="value" id="summaryDate">—</span>
+                      </div>
+                      <div class="summary-item">
+                        <span class="label">Sessione</span
+                        ><span class="value" id="summarySession">—</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required />
+                    <label for="terms">
+                      Accetto i <a href="#">Termini e Condizioni</a> per la
+                      partecipazione alla Guida Sicura
+                      <span class="required">*</span>
+                    </label>
+                  </div>
+                  <span class="error" id="termsError"></span>
+
+                  <div class="form-navigation">
+                    <button type="button" class="btn-prev" id="prevStep3Btn">
+                      <i class="fas fa-arrow-left"></i> Indietro
+                    </button>
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                      Conferma Prenotazione <i class="fas fa-check"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /step3 -->
+
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="step-indicator">
+                  Step <span id="currentStep">1</span> di 3
+                </p>
+              </form>
+            </div>
+            <!-- /form-wrapper -->
+
+            <!-- ===== INFO CARD (sidebar) ===== -->
+            <aside class="info-card">
+              <h3 id="companyName">Palmino Motors</h3>
+              <p class="info-subtitle" id="companySubtitle">
+                Via Nazionale 1 · Roma
+              </p>
+
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="info-item-link"
+                id="companyMapsLink"
+              >
+                <i class="fas fa-map-marker-alt"></i>
+                <span>
+                  <span id="companyAddress">Via Nazionale 1, Roma</span>
+                  <small class="info-link-hint">Apri in Google Maps</small>
+                </span>
+              </a>
+
+              <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <a href="tel:+391234567890" id="companyPhoneLink"
+                  >+39 1234567890</a
+                >
+              </div>
+
+              <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:info@palminomotors.it" id="companyEmailLink"
+                  >info@palminomotors.it</a
+                >
+              </div>
+
+              <div class="info-item" id="pivaRow" style="display: none">
+                <i class="fas fa-receipt"></i>
+                <span id="companyPiva">—</span>
+              </div>
+
+              <div class="info-divider"></div>
+
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="whatsapp-btn"
+                id="whatsappLink"
+              >
+                <i class="fab fa-whatsapp"></i>
+                Contattaci su WhatsApp
+              </a>
+
+              <div class="info-divider"></div>
+
+              <p class="info-highlight">
+                <i class="fas fa-clock" style="margin-right: 0.4rem"></i>
+                Prova gratuita di <span id="durationLabel">30</span> minuti per
+                ogni moto!
+              </p>
+            </aside>
+          </div>
+          <!-- /container -->
+        </section>
+      </main>
+
+      <!-- ==================== MODAL: Lista Prenotazioni ==================== -->
+      <div id="bookingsModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Prenotazioni Test Ride</h2>
+            <button
+              class="close"
+              id="closeBookingsModal"
+              type="button"
+              aria-label="Chiudi"
+            >
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="table-container">
+              <table id="bookingsTable">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Moto</th>
+                    <th>Data</th>
+                    <th>Orario</th>
+                    <th>Azioni</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody"></tbody>
+              </table>
+              <div id="noBookings" class="no-data" style="display: none">
+                <i
+                  class="fas fa-calendar-times"
+                  style="
+                    font-size: 2rem;
+                    opacity: 0.3;
+                    display: block;
+                    margin-bottom: 0.75rem;
+                  "
+                ></i>
+                Nessuna prenotazione presente
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MODAL: Successo ==================== -->
+      <div id="successModal" class="modal">
+        <div class="modal-content modal-success">
+          <button
+            class="close"
+            id="closeSuccessModal"
+            type="button"
+            aria-label="Chiudi"
+          >
+            &times;
+          </button>
+          <div class="inner-content">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Prenotazione Confermata!</h2>
+            <p>Il tuo test ride è stato prenotato con successo.</p>
+            <p
+              id="successMessage"
+              style="
+                margin-top: 0.5rem;
+                font-weight: 600;
+                color: var(--secondary);
+              "
+            ></p>
+            <p class="text-small">
+              Riceverai una email di conferma con tutti i dettagli della
+              prenotazione.
+            </p>
+            <button id="closeSuccessBtn" class="btn-primary" type="button">
+              Chiudi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MODAL: Errore ==================== -->
+      <div id="errorModal" class="modal">
+        <div class="modal-content modal-error">
+          <button
+            class="close"
+            id="closeErrorModal"
+            type="button"
+            aria-label="Chiudi"
+          >
+            &times;
+          </button>
+          <div class="inner-content">
+            <div class="error-icon">
+              <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h2>Si è verificato un errore</h2>
+            <p id="errorMessage">
+              Impossibile completare la prenotazione. Riprova o contattaci
+              direttamente.
+            </p>
+            <button
+              id="closeErrorBtn"
+              class="btn-primary"
+              type="button"
+              style="margin-top: 1.5rem"
+            >
+              Chiudi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== LOADER ==================== -->
+      <div id="loader" class="loader-container">
+        <div class="spinner"></div>
+        <p class="loader-text">Invio in corso…</p>
+      </div>
+
+      <!-- ==================== TOAST ==================== -->
+      <div id="toastContainer" class="toast-container"></div>
+
+      <!-- ==================== FOOTER ==================== -->
+      <footer>
+        <p id="footerText">
+          &copy; 2026 Palmino Motors · Tutti i diritti riservati
+        </p>
+        <p
+          id="footerPiva"
+          style="
+            display: none;
+            font-size: 0.75rem;
+            margin-top: 2px;
+            opacity: 0.7;
+          "
+        ></p>
+      </footer>
+    </div>
+    <!-- /app-container -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/slots.js"></script>
+    <script src="js/motorcycles.js"></script>
+    <script src="js/form.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

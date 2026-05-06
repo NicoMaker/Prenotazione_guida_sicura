@@ -1,0 +1,82 @@
+{
+  "company": {
+    "name": "Palmino Motors",
+    "address": "Via Nazionale 1",
+    "city": "Roma",
+    "cap": "00184",
+    "piva": "12345678901",
+    "email": "nicola.marano02@gmail.com",
+    "phone": "+39 1234567890",
+    "whatsapp": "391234567890",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Via+Nazionale+1+Roma"
+  },
+  "managers": [
+    {
+      "name": "Rofer Manreo Messa",
+      "email": "nicola.marano02@gmail.com"
+    }
+  ],
+  "testRideSettings": {
+    "durationMinutes": 30,
+    "defaultTimeSlots": [
+      "09:00",
+      "09:30",
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "12:00",
+      "12:30",
+      "14:00",
+      "14:30",
+      "15:00",
+      "15:30",
+      "16:00",
+      "16:30",
+      "17:00",
+      "17:30",
+      "18:00",
+      "18:30",
+      "19:00",
+      "19:30",
+      "20:00"
+    ],
+    "daysAvailable": [
+      {
+        "day": "10",
+        "month": "5",
+        "year": "2026",
+        "dayName": "Domenica",
+        "available": true,
+        "timeSlots": [
+          "09:00",
+          "09:30",
+          "10:00",
+          "10:30",
+          "11:00",
+          "11:30",
+          "12:00",
+          "12:30",
+          "14:00",
+          "14:30",
+          "15:00",
+          "15:30",
+          "16:00",
+          "16:30",
+          "17:00",
+          "17:30"
+        ],
+        "sessionLimits": {
+          "morning": {
+            "slots": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30"],
+            "maxBookings": 30
+          },
+          "afternoon": {
+            "slots": ["14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"],
+            "maxBookings": 30
+          }
+        }
+      }
+    ]
+  }
+}
