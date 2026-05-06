@@ -35,22 +35,44 @@ function showToast(message, type = "info", duration = 4000) {
 function showSuccessModal(booking) {
   const [y, m, d] = booking.date.split("-");
   const dateFormatted = `${padTwo(d)}/${padTwo(m)}/${y}`;
-  document.getElementById("successMessage").textContent =
-    `Prenotazione confermata per il ${dateFormatted} alle ${booking.time}`;
-  document.getElementById("successModal").classList.add("show");
+  const sessionLabel = booking.session === 'morning' ? 'Mattina' : 'Pomeriggio';
+  const messageEl = document.getElementById("successMessage");
+  const modalEl = document.getElementById("successModal");
+  
+  if (messageEl && modalEl) {
+    messageEl.textContent = `Prenotazione confermata per il ${dateFormatted} — Sessione ${sessionLabel}`;
+    modalEl.classList.add("show");
+  } else {
+    console.error("Success modal elements not found");
+    alert(`Prenotazione confermata per il ${dateFormatted} — Sessione ${sessionLabel}`);
+  }
 }
 
 function closeSuccessModal() {
-  document.getElementById("successModal").classList.remove("show");
+  const modalElement = document.getElementById("successModal");
+  if (modalElement) {
+    modalElement.classList.remove("show");
+  }
 }
 
 function showErrorModal(message) {
-  document.getElementById("errorMessage").innerHTML = message;
-  document.getElementById("errorModal").classList.add("show");
+  const errorElement = document.getElementById("errorMessage");
+  const modalElement = document.getElementById("errorModal");
+  
+  if (errorElement && modalElement) {
+    errorElement.innerHTML = message;
+    modalElement.classList.add("show");
+  } else {
+    console.error("Error modal elements not found:", message);
+    alert(message); // Fallback to alert if modal elements are not available
+  }
 }
 
 function closeErrorModal() {
-  document.getElementById("errorModal").classList.remove("show");
+  const modalElement = document.getElementById("errorModal");
+  if (modalElement) {
+    modalElement.classList.remove("show");
+  }
 }
 
 function updateFormView() {
@@ -92,32 +114,4 @@ function updateSummary() {
   document.getElementById("summarySession").textContent = 
     AppState.formData.session === 'morning' ? 'Mattina' : 
     AppState.formData.session === 'afternoon' ? 'Pomeriggio' : '-';
-}
-
-function showConflictMessage(booking) {
-  const userDate = document.getElementById("date").value;
-  const userTime = AppState.formData.selectedTime;
-
-  if (
-    booking.date === userDate &&
-    booking.time === userTime
-  ) {
-    document.getElementById("time").value = "";
-    AppState.formData.selectedTime = "";
-    document
-      .querySelectorAll(".time-slot")
-      .forEach((s) => s.classList.remove("selected"));
-
-    const [y, m, d] = booking.date.split("-");
-    const dateFormatted = `${padTwo(d)}/${padTwo(m)}/${y}`;
-
-    showErrorModal(
-      `<strong>Orario non più disponibile</strong><br><br>` +
-        `Lo slot delle <strong>${booking.time}</strong> del <strong>${dateFormatted}</strong> ` +
-        `è stato appena prenotato da un altro utente.<br><br>` +
-        `Per favore seleziona un orario diverso.`,
-    );
-    AppState.currentStep = 2;
-    updateFormView();
-  }
 }

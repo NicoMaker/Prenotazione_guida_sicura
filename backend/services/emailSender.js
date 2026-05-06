@@ -9,11 +9,13 @@ export async function sendConfirmationEmails(booking, companyInfoData) {
   const companyName = c.name || "Palmino Motors";
   const dateShort = formatDateIT(booking.date);
 
+  const sessionLabel = booking.session === 'morning' ? 'Mattina' : 'Pomeriggio';
+
   // ── Email cliente ──
   await transporter.sendMail({
     from: `"${companyName}" <${process.env.EMAIL_USER}>`,
     to: booking.email,
-    subject: `✓ Guida Sicura confermata – ${dateShort} ore ${booking.time} | ${companyName}`,
+    subject: `✓ Guida Sicura confermata – ${dateShort} sessione ${sessionLabel} | ${companyName}`,
     html: buildClienteEmail(booking, companyInfoData),
   });
 
@@ -26,7 +28,7 @@ export async function sendConfirmationEmails(booking, companyInfoData) {
     await transporter.sendMail({
       from: `"${companyName}" <${process.env.EMAIL_USER}>`,
       to: managerEmails,
-      subject: `[Guida Sicura] ${booking.nome} ${booking.cognome} · ${dateShort} ${booking.time}`,
+      subject: `[Guida Sicura] ${booking.nome} ${booking.cognome} · ${dateShort} ${sessionLabel}`,
       html: buildManagerEmail(booking, companyInfoData),
     });
   }

@@ -14,6 +14,11 @@ function loadDates(daysAvailable) {
   AppState.dateSlotsMap = {};
   const availableDateValues = [];
 
+  if (!dateSelect || !container) {
+    console.error("Required DOM elements not found: date or dateSlotsContainer");
+    return;
+  }
+
   daysAvailable.forEach((day) => {
     if (!day.available) return;
     const month = padTwo(day.month);
@@ -45,27 +50,40 @@ function loadDates(daysAvailable) {
 }
 
 function selectDateCard(value, card, silent = false) {
+  if (!card) {
+    console.error("Card element is null in selectDateCard");
+    return;
+  }
+
   document
     .querySelectorAll(".date-slot")
     .forEach((s) => s.classList.remove("selected"));
   card.classList.add("selected");
-  document.getElementById("date").value = value;
+  
+  const dateSelect = document.getElementById("date");
+  if (dateSelect) dateSelect.value = value;
+  
   AppState.formData.selectedDate = value;
-  if (!silent) document.getElementById("dateError").textContent = "";
+  if (!silent) {
+    const dateError = document.getElementById("dateError");
+    if (dateError) dateError.textContent = "";
+  }
 
   // Reset session selection when date changes
   document.querySelectorAll('input[name="session"]').forEach(radio => {
     radio.checked = false;
   });
   AppState.formData.selectedSession = "";
-  document.getElementById("sessionError").textContent = "";
+  const sessionError = document.getElementById("sessionError");
+  if (sessionError) sessionError.textContent = "";
 
   loadTimeSlotsForDate(value);
 
-  const time = document.getElementById("time").value;
+  const timeSelect = document.getElementById("time");
+  const time = timeSelect ? timeSelect.value : "";
   const slots = AppState.dateSlotsMap[value] || [];
   if (time && !slots.includes(time)) {
-    document.getElementById("time").value = "";
+    if (timeSelect) timeSelect.value = "";
     AppState.formData.selectedTime = "";
     document
       .querySelectorAll(".time-slot")
@@ -96,45 +114,56 @@ function loadTimeSlotsForDate(dateVal) {
   const timeSelect = document.getElementById("time");
   const container = document.getElementById("timeSlotsContainer");
 
-  timeSelect.innerHTML = '<option value="">Seleziona orario...</option>';
-  slots.forEach((slot) => {
-    const opt = document.createElement("option");
-    opt.value = slot;
-    opt.textContent = slot;
-    timeSelect.appendChild(opt);
-  });
+  if (timeSelect) {
+    timeSelect.innerHTML = '<option value="">Seleziona orario...</option>';
+    slots.forEach((slot) => {
+      const opt = document.createElement("option");
+      opt.value = slot;
+      opt.textContent = slot;
+      timeSelect.appendChild(opt);
+    });
+  }
 
-  container.innerHTML = "";
-  
-  if (!selectedSession) {
-    container.innerHTML = '<div class="no-session-selected">Seleziona prima Mattina o Pomeriggio</div>';
+  if (container) {
+    container.innerHTML = "";
+    
+    if (!selectedSession) {
+      container.innerHTML = '<div class="no-session-selected">Seleziona prima Mattina o Pomeriggio</div>';
+      return;
+    }
+  } else if (!selectedSession) {
+    console.warn("timeSlotsContainer not found, but no session selected");
     return;
   }
   
   const key = dateVal; // Simple key for date-based bookings
   const booked = key ? AppState.bookedSlots[key] || [] : [];
 
-  slots.forEach((slot) => {
-    const btn = document.createElement("div");
-    const isBooked = booked.includes(slot);
-    btn.className = "time-slot" + (isBooked ? " booked" : "");
-    btn.textContent = slot;
-    btn.dataset.slot = slot;
+  if (container) {
+    slots.forEach((slot) => {
+      const btn = document.createElement("div");
+      const isBooked = booked.includes(slot);
+      btn.className = "time-slot" + (isBooked ? " booked" : "");
+      btn.textContent = slot;
+      btn.dataset.slot = slot;
 
-    if (!isBooked) {
-      btn.addEventListener("click", () => {
-        document
-          .querySelectorAll(".time-slot")
-          .forEach((s) => s.classList.remove("selected"));
-        btn.classList.add("selected");
-        document.getElementById("time").value = slot;
-        AppState.formData.selectedTime = slot;
-        document.getElementById("timeError").textContent = "";
-      });
-    }
+      if (!isBooked) {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".time-slot")
+            .forEach((s) => s.classList.remove("selected"));
+          btn.classList.add("selected");
+          const timeSelect = document.getElementById("time");
+          if (timeSelect) timeSelect.value = slot;
+          AppState.formData.selectedTime = slot;
+          const timeError = document.getElementById("timeError");
+          if (timeError) timeError.textContent = "";
+        });
+      }
 
-    container.appendChild(btn);
-  });
+      container.appendChild(btn);
+    });
+  }
 }
 
 function refreshTimeSlotsUI() {

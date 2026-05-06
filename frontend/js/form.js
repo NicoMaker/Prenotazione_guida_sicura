@@ -101,9 +101,12 @@ function resetForm() {
 
   const settings = AppState.companyInfo?.testRideSettings;
   if (settings?.daysAvailable) {
-    document.getElementById("dateSlotsContainer").innerHTML = "";
-    document.getElementById("date").innerHTML =
-      '<option value="">Seleziona data...</option>';
+    const dateSlotsContainer = document.getElementById("dateSlotsContainer");
+    const dateSelect = document.getElementById("date");
+    if (dateSlotsContainer) dateSlotsContainer.innerHTML = "";
+    if (dateSelect) {
+      dateSelect.innerHTML = '<option value="">Seleziona data...</option>';
+    }
     AppState.dateSlotsMap = {};
     loadDates(settings.daysAvailable);
   }

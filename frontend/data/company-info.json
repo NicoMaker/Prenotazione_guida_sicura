@@ -5,7 +5,8 @@
     "city": "Roma",
     "cap": "00184",
     "email": "nicola.marano02@gmail.com",
-    "phone": "+39 1234567890"
+    "phone": "+39 1234567890",
+    "piva": "12345678901"
   },
   "managers": [
     {
