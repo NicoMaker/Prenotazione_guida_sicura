@@ -19,7 +19,6 @@ async function loadAllData() {
     }
   } catch (error) {
     console.error("Errore caricamento:", error);
-    showToast("Errore nel caricamento dei dati", "error");
   }
 }
 

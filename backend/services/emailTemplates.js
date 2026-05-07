@@ -113,10 +113,6 @@ export function buildClienteEmail(booking, companyInfoData) {
           <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;border-bottom:1px solid #e8e8e8;">Servizio</td>
           <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;font-weight:700;border-bottom:1px solid #e8e8e8;">Guida Sicura</td>
         </tr>
-        <tr>
-          <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#888888;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#f8f8f8;">Durata</td>
-          <td style="padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;font-weight:700;">30 minuti</td>
-        </tr>
       </table>
 
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
