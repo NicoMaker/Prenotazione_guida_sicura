@@ -23,7 +23,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer);
-const PORT = 3002;
+const PORT = 3003;
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors());

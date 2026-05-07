@@ -116,13 +116,6 @@ export function buildClienteEmail(booking, companyInfoData) {
       </table>
 
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-        <tr>
-          <td style="background:#fff5f3;border-left:4px solid #e63312;border-radius:0 5px 5px 0;padding:13px 16px;">
-            <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;line-height:1.6;">
-              &#9888;&nbsp; Presentati <strong>10 minuti prima</strong> dell'orario con <strong>documento d'identità</strong> e <strong>patente di guida</strong>.
-            </p>
-          </td>
-        </tr>
       </table>
 
       <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:700;color:#e63312;letter-spacing:2.5px;text-transform:uppercase;border-bottom:2px solid #e63312;padding-bottom:6px;">Dove Siamo</p>

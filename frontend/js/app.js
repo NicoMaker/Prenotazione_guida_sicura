@@ -54,7 +54,7 @@ function updateSessionAvailability() {
   ['morning', 'afternoon'].forEach(session => {
     const key = `${dateVal}|${session}`;
     const bookings = AppState.bookedSlots[key] || [];
-    const available = 30 - bookings.length;
+    const available = 25 - bookings.length;
     
     const counter = document.querySelector(`[data-session="${session}"] .availability-counter`);
     if (counter) {
